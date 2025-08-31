@@ -18,8 +18,8 @@ const logger = {
     origLogger.error(msg, { timestamp: true, ...options }),
 };
 
-const pagesData = {};
-const searchData = [];
+let pagesData = {};
+let searchData = [];
 
 const Base64 = {
   _Rixits: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/",
@@ -58,13 +58,26 @@ async function crawlContent(file) {
     logger.error(`==> No title found in ${file}`);
     return;
   }
-  pagesData[metaInfo.slug] = parsed;
   searchData.push([
     metaInfo.slug,
     metaInfo.title,
     metaInfo.category || "",
     metaInfo.writeAt
       ? (() => {
+          if (
+            metaInfo.writeAt.length == 9 &&
+            metaInfo.writeAt.startsWith("D")
+          ) {
+            // D + YYYYMMDD
+            let yyyy = parseInt(metaInfo.writeAt.slice(1, 5));
+            let mm = parseInt(metaInfo.writeAt.slice(5, 7)) - 1;
+            let dd = parseInt(metaInfo.writeAt.slice(7, 9));
+            let t = new Date(yyyy, mm, dd);
+            if (!isNaN(t.getTime())) {
+              parsed.meta.writeAt = t.getTime().toString();
+              return Base64.fromNumber(t.getTime());
+            }
+          }
           let t = new Date();
           try {
             t = new Date(metaInfo.writeAt);
@@ -82,6 +95,8 @@ async function crawlContent(file) {
         })()
       : "",
   ]);
+
+  pagesData[metaInfo.slug] = parsed;
 }
 
 async function crawlPages() {
@@ -122,6 +137,9 @@ async function crawlPages() {
 }
 
 export default async function ensure() {
+  pagesData = {};
+  searchData = [];
+
   if (!existsSync(BUILD_DIR)) await mkdir(BUILD_DIR, { recursive: true });
   if (
     existsSync(join(BUILD_DIR, "gt.txt")) &&
