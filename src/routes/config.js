@@ -2,30 +2,30 @@
  * @type {import("./config").TConfig}
  */
 export const config = {
-  blogName: "Oein's Story",
+  blogName: "Notedown Blog",
 
-  name: "박오인",
-  bio: "개발자가 되고 싶은 영원한 잼민이",
+  name: "Blog Owner",
+  bio: "A passionate developer and eternal learner.",
 
   profileImageURL: "/profileImage.webp",
   bannerImageURL: "/wideBackgroundImage.webp",
 
-  // projects: [
-  //   {
-  //     name: "치직치지직",
-  //     url: "https://github.com/poikr/chzzkExt",
-  //   },
-  // ],
+  projects: [
+    {
+      name: "sample project",
+      url: "https://example.com",
+    },
+  ],
 
   social: {
-    github: "https://github.com/Oein",
-    x: "https://x.com/oein0219",
+    github: "https://github.com/",
+    x: "https://x.com/",
   },
 
   links: [
     {
       name: "Buy me a coffee",
-      url: "https://www.buymeacoffee.com/oein0219",
+      url: "https://www.buymeacoffee.com/",
       iconSVG: `<svg
           xmlns="http://www.w3.org/2000/svg"
           width="1em"
@@ -41,6 +41,6 @@ export const config = {
 
   api: {
     POSTS_PER_PAGE: 20,
-    GTAG_ID: "G-9KRZP4YS75",
+    // GTAG_ID: "",
   },
 };
